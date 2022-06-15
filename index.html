@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Imageboard Project</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body background="/img/background.jpg">
+        <div id="vueContent">
+          <main>
+          <form  id="form-upload" v-on:submit="onSubmit" enctype="multipart/form-data" action="/upload" method="POST" >
+            <div class="form-container">
+               <div class="row">
+                  <div class="col-25">
+                     <label for="username">User</label>
+                  </div>
+                  <div class="col-75">
+                       <input type="text" name="username"  v-model="username" placeholder="Your username" required>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-25">
+                     <label for="title">Title</label>
+                  </div>
+                  <div class="col-75">
+                       <input type="text" name="title" v-model="title" placeholder="Title of the image">
+                  </div>
+                </div>
+                <div class="row fordescription">
+                  <div class="col-25">
+                    <label for="description">Description</label>
+                  </div>
+                  <div class="col-75">
+                    <input type="text" name="description" v-model="description" class="description" placeholder="Please write a description for your image">
+                  </div>
+                </div>
+            </div>
+            <div class="file-container">
+                <div class="col-25"></div>
+                <div class="col-25">
+                 <label class="custom-file-upload">
+                     
+                     Select file
+                     <input type="file" accept="image/*" name="image" ref="image" required />
+                 </label>
+                </div>
+            <div class="col-25">
+   <button type="submit"  class="action">Upload</button>
+                </div>
+                  
+                 
+            </div>
+          </form>
+         
+            <article  class="imageboard" v-if="images.length > 0">
+                <div v-for="image in images">
+                    <a v-bind:href="'#'+image.id">
+                    <img v-bind:src="image.url" v-bind:alt="image.description" v-on:click="onImageCLick(image.id)" />
+                    </a>
+                    <p><i> <span class="text-bf">Title: </span> {{image.title}}</i> <br>
+                       <i><span class="text-bf" > Submitted by:</span> {{image.username}} </i> <br>
+                    </p>
+
+                </div>
+            </article>
+            <article v-else>
+                <div>
+                    <p>Sorry, no images yet.</p>
+                </div>
+            </article>
+ <div class="loadmore">
+                <p  v-if="!isThereNextPage" > Sorry, no more pictures to load!</p>
+                <button v-if="isThereNextPage" v-on:click="moreImages"> Load More</button>
+            </div>
+
+            </main>
+            <modal 
+                v-if="currentImageID"
+                v-bind:id="currentImageID"
+                v-on:close="onModalClose()"
+            ></modal>
+        </div>
+        <script
+            src="/js/app.js"
+            type="module"
+            crossorigin="use-credentials"
+        ></script>
+    </body>
+</html>
